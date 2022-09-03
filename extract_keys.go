@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// args[2] is the input_file, args[3] is the output_file
 func extract_keys(args []string) {
 	input_file, err := os.Open(args[0])
 	log_error(err)
