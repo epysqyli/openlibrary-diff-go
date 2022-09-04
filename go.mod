@@ -1,3 +1,3 @@
-module openlibrary/get_keys
+module openlibrary/main
 
 go 1.18
