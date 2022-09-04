@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
+	"fmt"
 	"io"
 	"os"
-	"strings"
 )
 
 // args[2] is the input_file, args[3] is the output_file
@@ -17,6 +18,7 @@ func extract_keys(args []string) {
 	parser := csv.NewReader(input_file)
 	parser.LazyQuotes = true
 	parser.FieldsPerRecord = -1
+	parser.Comma = '\t'
 
 	defer output_file.Close()
 	defer input_file.Close()
@@ -24,17 +26,21 @@ func extract_keys(args []string) {
 	writer := csv.NewWriter(output_file)
 	defer writer.Flush()
 
-	for {
+	count := 0
+
+	for count < 1 {
 		record, err := parser.Read()
 		if err == io.EOF {
 			break
 		}
 
 		log_error(err)
+		var entry Entry
+		json.Unmarshal([]byte(record[4]), &entry)
+		fmt.Println(entry)
+		// fmt.Println(entry.Created.Value)
+		// writer.Write([]string{record[4]})
 
-		entries := strings.Fields(record[0])
-		key_slice := strings.Split(entries[1], "/")
-		key := []string{key_slice[len(key_slice)-1]}
-		writer.Write(key)
+		count++
 	}
 }

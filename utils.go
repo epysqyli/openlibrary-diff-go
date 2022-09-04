@@ -3,15 +3,12 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 )
-
-// define the number of concurrent routines
-// split the new_keys file into as many partial files as there are routines
-// run get_diff() for each partial file, all writing to same dest file
 
 func keys_length() int {
 	cmd := exec.Command("wc", "-l", "new_keys.txt")
@@ -58,4 +55,10 @@ func split_file(chunks int, chunk_size int) {
 	}
 
 	new_keys_file.Close()
+}
+
+func log_error(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
