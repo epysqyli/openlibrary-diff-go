@@ -1,6 +1,3 @@
-// the only reasonable approach is to compare created_at dates for each record
-// the ones which are newer than a threshold are to be extracted
-
 package main
 
 import (
@@ -8,13 +5,13 @@ import (
 	"os"
 )
 
-//
+// example date: "2022-03-01T00:00:00Z00:00"
 func main() {
 	args := os.Args[1:]
-	if len(args) < 2 {
-		fmt.Println("Args missing. Exiting.")
+	if len(args) < 3 {
+		fmt.Printf("3 parameters needed:\nInput file of records\nOutput file name\nThreshold datetime\n")
 		os.Exit(1)
 	}
 
-	extract_keys(args)
+	extract_new_records(args)
 }

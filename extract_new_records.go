@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 )
 
-// args[2] is the input_file, args[3] is the output_file
-func extract_keys(args []string) {
+// args[0] is the input_file
+// args[1] is the output_file
+// args[2] is the RFC3339 compliant datetime threshold
+func extract_new_records(args []string) {
 	input_file, err := os.Open(args[0])
 	log_error(err)
 	output_file, err := os.Create(args[1])
@@ -20,15 +21,10 @@ func extract_keys(args []string) {
 	parser.FieldsPerRecord = -1
 	parser.Comma = '\t'
 
-	defer output_file.Close()
-	defer input_file.Close()
-
 	writer := csv.NewWriter(output_file)
-	defer writer.Flush()
+	threshold := args[2]
 
-	count := 0
-
-	for count < 1 {
+	for {
 		record, err := parser.Read()
 		if err == io.EOF {
 			break
@@ -37,10 +33,14 @@ func extract_keys(args []string) {
 		log_error(err)
 		var entry Entry
 		json.Unmarshal([]byte(record[4]), &entry)
-		fmt.Println(entry)
-		// fmt.Println(entry.Created.Value)
-		// writer.Write([]string{record[4]})
 
-		count++
+		record_is_new := entry.Created.Value > threshold
+		if record_is_new == true {
+			writer.Write(record)
+		}
 	}
+
+	writer.Flush()
+	output_file.Close()
+	input_file.Close()
 }
