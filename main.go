@@ -14,7 +14,10 @@ func main() {
 	}
 
 	if len(args) == 2 {
-		extract_new_records(args, time.Now().Format(time.RFC3339))
+		now := time.Now()
+		last_month := time.Month(now.Month() - 1)
+		last_month_time := time.Date(now.Year(), last_month, 1, 0, 0, 0, 0, time.Local)
+		extract_new_records(args, last_month_time.Format(time.RFC3339))
 	}
 
 	// example date: "2022-03-01T00:00:00Z00:00"
