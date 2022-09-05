@@ -9,8 +9,7 @@ import (
 
 // args[0] is the input_file
 // args[1] is the output_file
-// args[2] is the RFC3339 compliant datetime threshold
-func extract_new_records(args []string) {
+func extract_new_records(args []string, threshold string) {
 	input_file, err := os.Open(args[0])
 	log_error(err)
 	output_file, err := os.Create(args[1])
@@ -22,7 +21,6 @@ func extract_new_records(args []string) {
 	parser.Comma = '\t'
 
 	writer := csv.NewWriter(output_file)
-	threshold := args[2]
 
 	for {
 		record, err := parser.Read()

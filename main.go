@@ -3,15 +3,23 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 )
 
-// example date: "2022-03-01T00:00:00Z00:00"
 func main() {
 	args := os.Args[1:]
-	if len(args) < 3 {
-		fmt.Printf("3 parameters needed:\nInput file of records\nOutput file name\nThreshold datetime\n")
+	if len(args) < 2 {
+		fmt.Printf("2 parameters needed:\nInput file of records\nOutput file name\n")
 		os.Exit(1)
 	}
 
-	extract_new_records(args)
+	if len(args) == 2 {
+		extract_new_records(args, time.Now().Format(time.RFC3339))
+	}
+
+	// example date: "2022-03-01T00:00:00Z00:00"
+	// supply time RFC3339 compliant time threshold from as cmd arg
+	if len(args) == 3 {
+		extract_new_records(args, args[2])
+	}
 }
