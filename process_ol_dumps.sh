@@ -24,8 +24,8 @@ extract_recent_resources_with_timestamp() {
 }
 
 import_resources() {
-  sed -i 'i1 type,key,revision,last_modified,json' recent_works.txt
-  sed -i 'i1 type,key,revision,last_modified,json' recent_authors.txt
+  sed -i '1i type,key,revision,last_modified,json' recent_works.txt
+  sed -i '1i type,key,revision,last_modified,json' recent_authors.txt
 
   RECENT_WORKS="$(pwd)/recent_works.txt"
   RECENT_AUTHORS="$(pwd)/recent_authors.txt"
