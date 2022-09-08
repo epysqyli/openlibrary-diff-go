@@ -27,8 +27,8 @@ import_resources() {
   sed -i 'i1 type,key,revision,last_modified,json' recent_works.txt
   sed -i 'i1 type,key,revision,last_modified,json' recent_authors.txt
 
-  $RECENT_WORKS="$(pwd)/recent_works.txt"
-  $RECENT_AUTHORS="$(pwd)/recent_authors.txt"
+  RECENT_WORKS="$(pwd)/recent_works.txt"
+  RECENT_AUTHORS="$(pwd)/recent_authors.txt"
   
   cd ../wysebits-api
   bundle exec rake db:import_books[$RECENT_WORKS]
