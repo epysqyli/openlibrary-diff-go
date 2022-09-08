@@ -23,8 +23,24 @@ extract_recent_resources_with_timestamp() {
   ./main latest_authors.txt recent_authors.txt $1
 }
 
+import_resources() {
+  sed -i 'i1 type,key,revision,last_modified,json' recent_works.txt
+  sed -i 'i1 type,key,revision,last_modified,json' recent_authors.txt
+
+  $RECENT_WORKS="$(pwd)/recent_works.txt"
+  $RECENT_AUTHORS="$(pwd)/recent_authors.txt"
+  
+  cd ../wysebits-api
+  bundle exec rake db:import_books[$RECENT_WORKS]
+  bundle exec rake db:import_authors[$RECENT_AUTHORS]
+}
+
 cleanup_dumps() {
   rm latest_*.txt
+}
+
+cleanup_recent_files() {
+  rm recent_*.txt
 }
 
 # run script
@@ -37,4 +53,7 @@ else
   extract_recent_resources_with_timestamp $1
 fi
 
-cleanup_dumps
+cleanup_dumps;
+import_resources;
+cleanup_recent_files;
+
