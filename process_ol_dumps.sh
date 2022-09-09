@@ -30,7 +30,7 @@ import_resources() {
   RECENT_WORKS="$(pwd)/recent_works.txt"
   RECENT_AUTHORS="$(pwd)/recent_authors.txt"
   
-  cd ../wysebits-api
+  cd /home/elvis/wysebits-api
   bundle exec rake db:import_books[$RECENT_WORKS]
   bundle exec rake db:import_authors[$RECENT_AUTHORS]
 }
@@ -56,4 +56,3 @@ fi
 cleanup_dumps;
 import_resources;
 cleanup_recent_files;
-
