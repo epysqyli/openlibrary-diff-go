@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /home/elvis/.rails_envs # make sure this is set in production
+
 LATEST_WORKS=https://openlibrary.org/data/ol_dump_works_latest.txt.gz
 LATEST_AUTHORS=https://openlibrary.org/data/ol_dump_authors_latest.txt.gz
 
@@ -23,16 +25,9 @@ extract_recent_resources_with_timestamp() {
   ./main latest_authors.txt recent_authors.txt $1
 }
 
-import_resources() {
+prepare_resources_for_import() {
   sed -i '1i type,key,revision,last_modified,json' recent_works.txt
   sed -i '1i type,key,revision,last_modified,json' recent_authors.txt
-
-  RECENT_WORKS="$(pwd)/recent_works.txt"
-  RECENT_AUTHORS="$(pwd)/recent_authors.txt"
-  
-  cd $WYSEBITS_API_DIR 
-  bundle exec rake db:import_books[$RECENT_WORKS]
-  bundle exec rake db:import_authors[$RECENT_AUTHORS]
 }
 
 cleanup_dumps() {
@@ -45,14 +40,20 @@ cleanup_recent_files() {
 
 # run script
 download_dumps;
+wait;
 extract_dumps;
+wait;
 
 if [ -z "$1" ]; then
   extract_recent_resources
+  wait;
 else
   extract_recent_resources_with_timestamp $1
+  wait;
 fi
 
 cleanup_dumps;
-import_resources;
-cleanup_recent_files;
+wait;
+prepare_resources_for_import;
+wait;
+#cleanup_recent_files;
