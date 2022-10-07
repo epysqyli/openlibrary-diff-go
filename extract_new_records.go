@@ -7,8 +7,7 @@ import (
 	"os"
 )
 
-// args[0] is the input_file
-// args[1] is the output_file
+// args[0] input_file, args[1] output_file
 func extract_new_records(args []string, threshold string) {
 	input_file, err := os.Open(args[0])
 	log_error(err)
@@ -17,28 +16,26 @@ func extract_new_records(args []string, threshold string) {
 
 	parser := csv.NewReader(input_file)
 	parser.LazyQuotes = true
-	parser.FieldsPerRecord = -1
+	parser.FieldsPerRecord = 5
 	parser.Comma = '\t'
-
-	writer := csv.NewWriter(output_file)
 
 	for {
 		record, err := parser.Read()
+		log_error(err)
 		if err == io.EOF {
 			break
 		}
 
-		log_error(err)
 		var entry Entry
-		json.Unmarshal([]byte(record[4]), &entry)
-
+		json.Unmarshal([]byte(record[len(record)-1]), &entry)
 		record_is_new := entry.Created.Value > threshold
 		if record_is_new == true {
-			writer.Write(record)
+			output_file.WriteString(record[len(record)-1])
+			output_file.WriteString("\n")
 		}
 	}
 
-	writer.Flush()
+	output_file.Sync()
 	output_file.Close()
 	input_file.Close()
 }

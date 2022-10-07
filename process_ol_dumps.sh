@@ -25,16 +25,8 @@ extract_recent_resources_with_timestamp() {
   ./main latest_authors.txt recent_authors.txt $1
 }
 
-prepare_resources_for_import() {
-  sed -i '1i type,key,revision,last_modified,json' recent_works.txt
-  sed -i '1i type,key,revision,last_modified,json' recent_authors.txt
-}
-
 # source then call it from dir where recent files are for manual import
 import_resources() {
-  sed -i '1i type,key,revision,last_modified,json' recent_works.txt
-  sed -i '1i type,key,revision,last_modified,json' recent_authors.txt
-
   RECENT_WORKS="$(pwd)/recent_works.txt"
   RECENT_AUTHORS="$(pwd)/recent_authors.txt"
 
