@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /home/elvis/.rails_envs # make sure this is set in production
+DEST_DIR=/home/elvis/tasks/openlibrary-diff-go/
 
 LATEST_WORKS=https://openlibrary.org/data/ol_dump_works_latest.txt.gz
 LATEST_AUTHORS=https://openlibrary.org/data/ol_dump_authors_latest.txt.gz
@@ -27,8 +28,8 @@ extract_recent_resources_with_timestamp() {
 
 # source then call it from dir where recent files are for manual import
 import_resources() {
-  RECENT_WORKS="$(pwd)/recent_works.txt"
-  RECENT_AUTHORS="$(pwd)/recent_authors.txt"
+  RECENT_WORKS="$DEST_DIR/recent_works.txt"
+  RECENT_AUTHORS="$DEST_DIR/recent_authors.txt"
 
   cd $WYSEBITS_API_DIR
   bundle exec rake db:import_books[$RECENT_WORKS]
@@ -44,6 +45,7 @@ cleanup_recent_files() {
 }
 
 # run script
+cd $DEST_DIR
 download_dumps
 wait
 extract_dumps
