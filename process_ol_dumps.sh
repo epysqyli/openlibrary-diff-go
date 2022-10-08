@@ -59,6 +59,4 @@ fi
 
 cleanup_dumps
 wait
-prepare_resources_for_import
-wait
 #cleanup_recent_files;
